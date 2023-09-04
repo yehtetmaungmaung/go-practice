@@ -6,24 +6,27 @@ import (
 	"net/http"
 )
 
-var nextID = make(chan int)
+// Now: let's implement object oriented version of the previous version.
+
+type nextCh chan int
 
 // Every request will read from nextID channel, then the counter go
 // routine will be able to send
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>You got %d!</h1>", <-nextID)
+func (ch nextCh) handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>You got %d!</h1>", <-ch)
 }
 
 // The function will run forever, but nextID will be blocked until
 // handler reads from the nextID channel
-func counter() {
+func counter(ch chan<- int) {
 	for i := 0; ; i++ {
-		nextID <- i
+		ch <- i
 	}
 }
 
 func main() {
-	go counter()
-	http.HandleFunc("/", handler)
+	var nextID nextCh = make(chan int)
+	go counter(nextID)
+	http.HandleFunc("/", nextID.handler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
