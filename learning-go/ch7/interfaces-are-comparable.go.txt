@@ -1,0 +1,48 @@
+package main
+
+import "fmt"
+
+type Doubler interface {
+	Double()
+}
+
+type DoubleInt int
+
+func (d *DoubleInt) Double() {
+	*d = *d * 2
+}
+
+type DoubleIntSlice []int
+
+func (d DoubleIntSlice) Double() {
+	for i := range d {
+		d[i] = d[i] * 2
+	}
+}
+
+func DoubleCompare(d1, d2 Doubler) {
+	fmt.Println(d1 == d2)
+}
+
+func main() {
+	var di DoubleInt = 10
+	var di2 DoubleInt = 10
+	var dis = DoubleIntSlice{1, 2, 3}
+	var dis2 = DoubleIntSlice{1, 2, 3}
+
+	// "InvalidIfaceAssign",
+	// "message": "cannot use di2 (variable of type DoubleInt) as Doubler value
+	// in argument to DoubleCompare: DoubleInt does not implement Doubler
+	// (method Double has pointer receiver)",
+	DoubleCompare(di, di2)
+
+	// False, because we are comparing pointers and they point to different values
+	DoubleCompare(&di, &di2)
+
+	// false, because they have different underlying type
+	DoubleCompare(&di, dis)
+
+	// panic: runtime error: comparing uncomparable type main.DoubleIntSlice
+	// the underlying types match, but are a non-comparable type
+	DoubleCompare(dis, dis2)
+}

@@ -1,0 +1,65 @@
+package main
+
+import "fmt"
+
+type MyInt int
+
+func typeAssert() {
+	var i any
+	var mine MyInt = 20
+	i = mine
+
+	i2 := i.(MyInt)
+	fmt.Println(i2 + 1)
+}
+
+func typeAssertPanicWrongType() {
+	// we are using recover to allow us to run through the
+	// failing type assertions.
+	defer func() {
+		if m := recover(); m != nil {
+			fmt.Println(m)
+		}
+	}()
+
+	var i any
+	var mine MyInt = 20
+	i = mine
+	i2 := i.(string)
+	fmt.Println(i2)
+}
+
+func typeAssertPanicNotIdentical() {
+	defer func() {
+		if m := recover(); m != nil {
+			fmt.Println(m)
+		}
+	}()
+	var i any
+	var mine MyInt = 20
+	i = mine
+	i2 := i.(int)
+	fmt.Println(i2 + 1)
+}
+
+func typeAssertCommaOk() error {
+	var i any
+	var mine MyInt = 20
+	i = mine
+	i2, ok := i.(int)
+	if !ok {
+		return fmt.Errorf("unexpected type for %v", i)
+	}
+	fmt.Println(i2 + 1)
+	return nil
+}
+
+func main() {
+	typeAssert()
+	typeAssertPanicWrongType()
+	typeAssertPanicNotIdentical()
+	err := typeAssertCommaOk()
+	if err != nil {
+		fmt.Println(err)
+	}
+}

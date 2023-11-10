@@ -1,0 +1,22 @@
+package typeswitch
+
+import "io"
+
+func doThings(i any) {
+	switch j := i.(type) {
+	case nil:
+		// i is nil, type of j is any
+	case int:
+		// j is of type int
+	case MyInt:
+		// j is of type MyInt
+	case io.Reader:
+		// j is of type io.Reader
+	case string:
+		// j is a string
+	case bool, rune:
+		// i is either a bool or rune, so j is of type any
+	default:
+		// no idea what i is, so j is of type any
+	}
+}
