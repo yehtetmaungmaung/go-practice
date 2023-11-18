@@ -64,7 +64,7 @@ send their errors to another part of your program that has complete information
 about the state of your program, and can make a more informed decision about what
 to do.
 
-```
+```go
 package main
 
 import (
