@@ -13,7 +13,7 @@ With concurrent processes, this question becomes a little more complex. Because 
 concurrent process is operating independently of its parent or siblings, it can be difficult for it to reason about what the right thing to do with the error is. Take a look at
 the following code for an example of this issue:
 
-```
+```go
 package main
 
 import (
@@ -64,7 +64,7 @@ send their errors to another part of your program that has complete information
 about the state of your program, and can make a more informed decision about what
 to do.
 
-```
+```go
 package main
 
 import (
@@ -134,7 +134,7 @@ what to do with errors.
 <br/><br/>
 In the previous example, we simply wrote errors out to stdio, but we could do something else. Let’s alter our program slightly so that it stops trying to check for status if
 three or more errors occur:
-```
+```go
 	done := make(chan interface{})
 	defer close(done)
 
