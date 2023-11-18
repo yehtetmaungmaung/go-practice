@@ -80,7 +80,7 @@ func main() {
 	}
 
 	// Create a JSON file for writing
-	jsonFile, err := os.Create("delete-fibermaps.json")
+	jsonFile, err := os.Create("delete-fibermaps-20k.json")
 	if err != nil {
 		log.Fatal(err)
 	}
