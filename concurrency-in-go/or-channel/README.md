@@ -8,7 +8,7 @@ channels together using the or-channel pattern.
 
 This pattern creates a composite done channel through recursion and goroutines.
 
-```
+```go
 package main
 
 import (
